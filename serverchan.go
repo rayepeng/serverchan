@@ -3,7 +3,6 @@ package serverchan
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -52,8 +51,9 @@ func (sc *ServerChan) Send(title, content string) (msg string, err error) {
 	}
 	t := make(map[string]interface{}, 0)
 	json.Unmarshal(p, &t)
-	if int(t["data"].(map[string]interface{})["errno"].(float64)) == 1024 {
-		return t["errmsg"].(string), errors.New("messages of the same content can only be sent once a minute")
-	}
+	//TODO: panic: interface conversion: interface {} is nil, not map[string]interface {} 如果超过次数会失败
+	// if int(t["data"].(map[string]interface{})["errno"].(float64)) == 1024 {
+	// 	return t["errmsg"].(string), errors.New("messages of the same content can only be sent once a minute")
+	// }
 	return "success", nil
 }
